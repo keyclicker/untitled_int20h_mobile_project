@@ -1,0 +1,116 @@
+{
+  "users": {
+    "keyclicker": {
+      "age": 17,
+      "name": "\u041a\u043e\u043b\u044f\u0441\u043e\u0447\u043d\u0438\u043a",
+      "picture": "a.jpg",
+      "hubs": [
+        "hackaton"
+      ],
+      "following": [
+        "oooleksyshyn",
+        "noisebomb"
+      ],
+      "followers": [
+        "noisebomb",
+        "oooleksyshyn"
+      ],
+      "activities": [
+        {
+          "competition": "running",
+          "date": 1582392345,
+          "time": 600,
+          "distance": 10000
+        },
+        {
+          "competition": "running",
+          "date": 1000000001,
+          "time": 650,
+          "distance": 10000
+        }
+      ],
+      "achievments": []
+    },
+    "noisebomb": {
+      "age": 17,
+      "name": "andrey",
+      "picture": "b.png",
+      "hubs": [
+        "hackaton"
+      ],
+      "following": [
+        "oooleksyshyn",
+        "keyclicker"
+      ],
+      "followers": [
+        "keyclicker"
+      ],
+      "activities": [],
+      "achievments": [
+        {
+          "achievment0": "description0"
+        },
+        {
+          "achievment1": "description1"
+        }
+      ]
+    },
+    "oooleksyshyn": {
+      "age": 19,
+      "name": "\u041a\u043e\u0442\u0438\u043a",
+      "picture": "b.png",
+      "hubs": [
+        "hackaton",
+        "university"
+      ],
+      "following": [
+        "maximka117",
+        "keyclicker"
+      ],
+      "followers": [
+        "keyclicker",
+        "noisebomb"
+      ],
+      "activities": [],
+      "achievments": []
+    },
+    "maximka117": {
+      "age": 18,
+      "name": "Maxim",
+      "picture": "a.jpg",
+      "hubs": [
+        "university"
+      ],
+      "following": [],
+      "followers": [
+        "oooleksyshyn"
+      ],
+      "activities": [
+        {
+          "competition": "walking",
+          "date": 1582302345,
+          "time": 3600,
+          "distance": 6000
+        }
+      ],
+      "achievments": []
+    }
+  },
+  "hubs": {
+    "hackaton": {
+      "competition": "running",
+      "members": [
+        "oooleksyshyn",
+        "keyclicker",
+        "noisebomb"
+      ]
+    },
+    "university": {
+      "competition": "walking",
+      "members": [
+        "maximka117",
+        "oooleksyshyn"
+      ]
+    }
+  }
+}
