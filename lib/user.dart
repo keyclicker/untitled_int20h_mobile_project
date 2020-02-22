@@ -4,7 +4,6 @@ import 'hub.dart';
 
 
 class User{
-  int id;
   String nickname;
   int age;
   String imageUrl;
@@ -14,13 +13,17 @@ class User{
   List<Hub> myHubs;
 
 
-  User(int id, String nick, int age){
-    this.id = id;
+  User(String nick, int age){
     this.nickname = nick;
     this.age = age;
     this.imageUrl = "https://u.o0bc.com/avatars/stock/_no-user-image.gif";
     this.following = [];
     this.followers = [];
+    this.pastActivities = [
+      Activity("Bicycle", DateTime.now(), DateTime.now(), 1),
+      Activity("Run", DateTime.now(), DateTime.now(), 1),
+      Activity("Swimming", DateTime.now(), DateTime.now(), 1)
+    ];
   }
 
   void addActivity(Activity activity){
@@ -141,33 +144,47 @@ class _UserState extends State<UserWidget> {
             ],
           ),
           user == me ? SizedBox(width: 0, height: 0,) : !me.iFollow(user) ? FlatButton(
-                    onPressed: () {
-                      setState ( () {
-                        me.addFollowing(user);
-                        user.addFollower(me);
-                      });
-
-                    },
+            onPressed: () {
+              setState ( () {
+                me.addFollowing(user);
+                user.addFollower(me);
+              });
+              },
+            color: Colors.blue,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+            ),
           child: Container(
             child: Text(
               "Follow",
                 style: TextStyle(
                   fontSize: 18,
+                  color: Colors.white,
                 ),
             ),
           ),
         ) : FlatButton(
+            color: Colors.white,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+                side: BorderSide(color: Colors.blue)
+            ),
             onPressed: (){},
             child: Container(
               child: Text(
-                  "Follow",
+                  "Followed",
                 style: TextStyle(
                   fontSize: 18,
+                  color: Colors.blue
                 ),
               ),
             ),
+          ),
+          Column(
+            children: me.pastActivities.map((activity){
+              return Text("${activity.type} (${activity.distance}km) on ${activity.actionDate.day}.${activity.actionDate.month}.${activity.actionDate.year}");
+            }).toList(),
           )
-
       ],
       ),
     );
