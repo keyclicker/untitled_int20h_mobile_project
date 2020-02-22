@@ -20,6 +20,10 @@ class User{
     this.imageUrl = "https://u.o0bc.com/avatars/stock/_no-user-image.gif";
     this.following = [];
     this.followers = [];
+    this.myHubs = [
+      Hub(1, "EPAM Hub", ActivityType.Running, []),
+      Hub(2, "Evo Hub", ActivityType.Walking, []),
+    ];
     this.pastActivities = [
       Activity(ActivityType.Cycling, DateTime.now(), Duration(minutes: 10, hours: 5), 10),
       Activity(ActivityType.Running, DateTime.now(), Duration(minutes: 50, hours: 2), 12),
@@ -73,76 +77,129 @@ class _UserState extends State<UserWidget> {
     return SafeArea(
       child: Column(
         children: <Widget>[
-          SizedBox(width: 30, height: 30,),
-          Row(
-            children: <Widget>[
-              SizedBox(width: 30, height: 30),
-              ClipRRect(
-                child: Container(
-                  height: 100,
-                  width: 100,
-                  child: Image(
-                    image: NetworkImage(user.imageUrl),
+          Container(
+            padding: EdgeInsets.only(top: 30, bottom: 15),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 5,
+                offset: Offset(2, 2),
+              )],
+            ),
+            child: Row(
+              children: <Widget>[
+                SizedBox(width: 30, height: 30),
+                ClipRRect(
+                  child: Container(
+                    height: 100,
+                    width: 100,
+                    child: Image(
+                      image: NetworkImage(user.imageUrl),
+                    ),
                   ),
+                  borderRadius: BorderRadius.all(Radius.circular(50.0)),
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(50.0)),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      "${user.nickname}",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(left: 25),
+                      child: Text(
+                        "${user.nickname}",
+                        style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Container(
-                    child: Text(
-                      "${user.age} years old",
-                      style: TextStyle(
-                        fontSize: 16,
+                    Container(
+                      padding: EdgeInsets.only(left: 25),
+                      child: Text(
+                        "${user.age} years old",
+                        style: TextStyle(
+                          fontSize: 14,
+                        ),
                       ),
                     ),
-                  ),
-                  Row(
-                      children: <Widget> [
-                        Container(
-                          child: Align(
+                    Row(
+                        children: <Widget> [
+                          Container(
                             child: FlatButton(
                               onPressed: (){},
-                              child: Text(
-                                "${user.followers.length} followers",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
+                              child: Column(
+                                children: <Widget>[
+                                  Text(
+                                    "${user.followers.length}",
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                  Text("followers",
+                                  style: TextStyle(
+                                    fontSize: 14
+                                  ),
+                                  )
+                                ],
                               ),
                             ),
-                            alignment: Alignment.centerLeft,
                           ),
-                        ),
-                        Container(
-                          child: Align(
+                          Container(
                             child: FlatButton(
                               onPressed: (){},
-                              child: Text(
-                                "${user.following.length} following",
-                                style: TextStyle(
-                                    fontSize: 16
-                                ),
+                              child: Column(
+                                children: <Widget>[
+                                  Text(
+                                    "${user.following.length}",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                  Text(
+                                      "following",
+                                  style: TextStyle(
+                                    fontSize: 14
+                                  ),)
+                                ],
                               ),
                             ),
-                            alignment: Alignment.centerLeft,
                           ),
-                        ),
-                      ]
-                  )
-                ],
-              )
-            ],
+                          Container(
+                            child: FlatButton(
+                              onPressed: (){
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context){ return HubListWidget(this.user.myHubs);}
+                                        )
+                                );
+                                },
+                              child: Column(
+                                children: <Widget>[
+                                  Text(
+                                    "${user.myHubs.length}",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                  Text("hubs",
+                                  style: TextStyle(
+                                    fontSize: 14
+                                  ),)
+                                ],
+                              ),
+                            ),
+                          )
+                        ]
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
           user == me ? SizedBox(width: 0, height: 0,) : !me.iFollow(user) ? FlatButton(
             onPressed: () {
@@ -182,10 +239,11 @@ class _UserState extends State<UserWidget> {
             ),
           ),
           Container(
+            padding: EdgeInsets.only(top: 20, bottom: 20),
             child: Text(
                 "Recent activities",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 25,
               ),
             ),
           ),
