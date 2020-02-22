@@ -61,6 +61,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
+        margin: const EdgeInsets.only(top: 50.0),
         child: Column(
           children: <Widget>[
             Padding(
@@ -79,18 +80,18 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             Expanded(
-                child: FlatButton(
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: items.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text('${items[index]}'),
+                      return FlatButton(
+                        child: Text('${items[index]}'),
+                        onPressed: () {
+                          //TODO
+                        },
                       );
                     },
                   ),
-                  onPressed: () {//TODO},
-                )
             ),
           ],
         ),
