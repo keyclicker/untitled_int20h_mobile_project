@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:untitled_int20h_mobile_project/screens/login_screen.dart';
 
 
-
 void main() => runApp(Login());
 
 

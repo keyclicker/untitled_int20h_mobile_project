@@ -1,4 +1,5 @@
 import 'user.dart';
+import 'activity.dart';
 
 
 class Hub{
