@@ -5,13 +5,27 @@ import 'activity.dart';
 
 
 class Profile extends StatefulWidget {
+  User me;
+  User user;
+
+  Profile(User me, User user){
+    this.me = me;
+    this.user = user;
+
+  }
+
   @override
-  _ProfileState createState() => _ProfileState();
+  _ProfileState createState() => _ProfileState(me, user);
 }
 
 class _ProfileState extends State<Profile> {
   User user = User("oleksii", 19);
   User me = User("sasha", 20);
+
+  _ProfileState(User me, User user){
+    this.user = user;
+    this.me = me;
+  }
 
   @override
   Widget build(BuildContext context) {

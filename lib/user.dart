@@ -181,7 +181,9 @@ class _UserState extends State<UserWidget> {
             ),
           ),
           Column(
-            children: me.pastActivities.map((activity){ return Text("${activity.type}");}).toList(),
+            children: me.pastActivities.map((activity){
+              return Text("${activity.type} (${activity.distance}km) on ${activity.actionDate.day}.${activity.actionDate.month}.${activity.actionDate.year}");
+            }).toList(),
           )
       ],
       ),
