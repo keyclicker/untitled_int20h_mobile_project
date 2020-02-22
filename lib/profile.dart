@@ -10,8 +10,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  User user = User(1, "oleksii", 19);
-  User me = User(2, "sasha", 20);
+  User user = User("oleksii", 19);
+  User me = User("sasha", 20);
 
   @override
   Widget build(BuildContext context) {
