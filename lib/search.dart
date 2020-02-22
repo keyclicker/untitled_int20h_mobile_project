@@ -8,7 +8,6 @@ class Search extends StatelessWidget {
     return new MaterialApp(
         title: 'Flutter Demo',
         theme: new ThemeData(
-        primarySwatch: Colors.blue,
     ),
     home: new SearchPage()
     );
@@ -80,15 +79,18 @@ class _SearchPageState extends State<SearchPage> {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text('${items[index]}'),
-                  );
-                },
-              ),
+                child: FlatButton(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text('${items[index]}'),
+                      );
+                    },
+                  ),
+                  onPressed: () {//TODO},
+                )
             ),
           ],
         ),
@@ -96,3 +98,5 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
+
+
