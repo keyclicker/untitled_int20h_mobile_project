@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'activity.dart';
+import 'package:untitled_int20h_mobile_project/activity_tile.dart';
+import 'activities.dart';
 import 'hub.dart';
 
 
@@ -20,9 +21,9 @@ class User{
     this.following = [];
     this.followers = [];
     this.pastActivities = [
-      Activity("Bicycle", DateTime.now(), DateTime.now(), 1),
-      Activity("Run", DateTime.now(), DateTime.now(), 1),
-      Activity("Swimming", DateTime.now(), DateTime.now(), 1)
+      Activity(ActivityType.Cycling, DateTime.now(), Duration(minutes: 10, hours: 5), 10),
+      Activity(ActivityType.Running, DateTime.now(), Duration(minutes: 50, hours: 2), 12),
+      Activity(ActivityType.Walking, DateTime.now(), Duration(minutes: 15, hours: 8), 13)
     ];
   }
 
@@ -180,9 +181,22 @@ class _UserState extends State<UserWidget> {
               ),
             ),
           ),
+          Container(
+            child: Text(
+                "Recent activities",
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
           Column(
             children: me.pastActivities.map((activity){
-              return Text("${activity.type} (${activity.distance}km) on ${activity.actionDate.day}.${activity.actionDate.month}.${activity.actionDate.year}");
+              return ActivityTile(
+                type: activity.type,
+                duration: activity.actionDuration,
+                date: activity.actionDate,
+                length: activity.distance,
+              );
             }).toList(),
           )
       ],
