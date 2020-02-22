@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:search_widget/search_widget.dart';
-
+import 'miniUser.dart';
 
 class Search extends StatelessWidget {
   @override

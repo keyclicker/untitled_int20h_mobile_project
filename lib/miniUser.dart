@@ -2,28 +2,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'user.dart';
 
-class MiniUser {
+class MiniUserWidget extends StatefulWidget {
   User user;
-  MiniUser(User _user) {
+  MiniUserWidget(User _user) {
     this.user = _user;
   }
 
-}
-
-class MiniUserWidget extends StatefulWidget {
-  MiniUser miniUser;
-  MiniUserWidget(MiniUser _miniuser) {
-    this.miniUser = _miniuser;
-  }
-
   @override
-  _MiniUserState createState() => _MiniUserState(this.miniUser);
+  _MiniUserState createState() => _MiniUserState(this.user);
 }
 
 class _MiniUserState extends State<MiniUserWidget>{
-  MiniUser miniUser;
-  _MiniUserState(MiniUser _miniUser) {
-    this.miniUser = _miniUser;
+  User user;
+  _MiniUserState(User _user) {
+    this.user = _user;
   }
 
   @override
@@ -34,9 +26,9 @@ class _MiniUserState extends State<MiniUserWidget>{
         children: <Widget>[
           ListTile(
             leading: Image(
-              image: NetworkImage(this.miniUser.user.imageUrl),
+              image: NetworkImage(this.user.imageUrl),
             ),
-            title: Text(this.miniUser.user.nickname),
+            title: Text(this.user.nickname),
           ),
         ],
       ),
