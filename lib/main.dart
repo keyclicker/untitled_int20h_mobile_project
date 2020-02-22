@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:untitled_int20h_mobile_project/screens/login_screen.dart';
-
+import 'activities.dart';
+import 'profile.dart';
+import 'search.dart';
+import 'screens/login_screen.dart';
 
 
 void main() => runApp(Login());
