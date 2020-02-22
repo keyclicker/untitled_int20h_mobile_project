@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'miniUser.dart';
+import 'user.dart';
 
 class Search extends StatelessWidget {
   @override
@@ -23,22 +24,33 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   TextEditingController editingController = TextEditingController();
 
-  final duplicateItems = List<String>.generate(10000, (i) => "Item $i");
-  var items = List<String>();
+  static User u = User("sasha", 3);
+  static User u1 = User("olega", 3);
+  static User me = User("igor", 3);
+  List<User> allUsers = [u, u1];
+
+  List<String> duplicateItems = List<String>(); //= List<String>.generate(10000, (i) => "Item $i");
+  var items = List<User>();
+
+  _SearchPageState() {
+    for (int i = 0; i < allUsers.length; i++) {
+      duplicateItems.add(allUsers[i].nickname);
+    }
+  }
 
   @override
   void initState() {
-    items.addAll(duplicateItems);
+    items.addAll(allUsers);
     super.initState();
   }
 
   void filterSearchResults(String query) {
-    List<String> dummySearchList = List<String>();
-    dummySearchList.addAll(duplicateItems);
+    List<User> dummySearchList = List<User>();
+    dummySearchList.addAll(allUsers);
     if(query.isNotEmpty) {
-      List<String> dummyListData = List<String>();
+      List<User> dummyListData = List<User>();
       dummySearchList.forEach((item) {
-        if(item.contains(query)) {
+        if(item.nickname.contains(query)) {
           dummyListData.add(item);
         }
       });
@@ -50,17 +62,16 @@ class _SearchPageState extends State<SearchPage> {
     } else {
       setState(() {
         items.clear();
-        items.addAll(duplicateItems);
+        items.addAll(allUsers);
       });
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
-        margin: const EdgeInsets.only(top: 50.0),
+        padding: const EdgeInsets.only(top: 30.0),
         child: Column(
           children: <Widget>[
             Padding(
@@ -80,23 +91,23 @@ class _SearchPageState extends State<SearchPage> {
             ),
             Expanded(
                   child: ListView.builder(
-                    shrinkWrap: true,
+                    //shrinkWrap: true,
                     itemCount: items.length,
                     itemBuilder: (context, index) {
-                      return FlatButton(
-                        child: Text('${items[index]}'),
+                      return new FlatButton(
+                        child:/*Text(items[index].nickname),*/ MiniUserWidget(items[index]),
                         onPressed: () {
-                          //TODO
+                          UserWidget(items[index], me);
                         },
                       );
                     },
                   ),
-            ),
+                )
+
           ],
         ),
       ),
     );
   }
 }
-
 

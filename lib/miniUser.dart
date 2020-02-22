@@ -18,15 +18,22 @@ class _MiniUserState extends State<MiniUserWidget>{
     this.user = _user;
   }
 
-  @override
+
   Widget build(BuildContext context) {
     return Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            leading: Image(
-              image: NetworkImage(this.user.imageUrl),
+            leading: ClipRRect(
+              child: Container(
+                height: 50,
+                width: 50,
+                child: Image(
+                  image: NetworkImage(user.imageUrl),
+                ),
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(25.0)),
             ),
             title: Text(this.user.nickname),
           ),
