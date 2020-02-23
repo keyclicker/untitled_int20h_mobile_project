@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'user.dart';
-import 'activity.dart';
 
 
 
@@ -19,8 +18,8 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  User user = User("oleksii", 19);
-  User me = User("sasha", 20);
+  User user;
+  User me;
 
   _ProfileState(User me, User user){
     this.user = user;

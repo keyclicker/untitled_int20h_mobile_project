@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'activity.dart';
+import 'package:untitled_int20h_mobile_project/activity_tile.dart';
+import 'activities.dart';
 import 'hub.dart';
 
 
@@ -19,10 +20,24 @@ class User{
     this.imageUrl = "https://u.o0bc.com/avatars/stock/_no-user-image.gif";
     this.following = [];
     this.followers = [];
+    this.myHubs = [
+      Hub(1, "EPAM Hub", ActivityType.Running, []),
+      Hub(2, "Evo Hub", ActivityType.Walking, []),
+      Hub(2, "Evo Hub", ActivityType.Walking, []),
+      Hub(2, "Evo Hub", ActivityType.Walking, []),
+      Hub(2, "Evo Hub", ActivityType.Walking, []),
+      Hub(2, "Evo Hub", ActivityType.Walking, []),
+      Hub(2, "Evo Hub", ActivityType.Walking, []),
+      Hub(2, "Evo Hub", ActivityType.Walking, []),
+    ];
     this.pastActivities = [
-      Activity("Bicycle", DateTime.now(), DateTime.now(), 1),
-      Activity("Run", DateTime.now(), DateTime.now(), 1),
-      Activity("Swimming", DateTime.now(), DateTime.now(), 1)
+      Activity(ActivityType.Cycling, DateTime.now(), Duration(minutes: 10, hours: 5), 10),
+      Activity(ActivityType.Running, DateTime.now(), Duration(minutes: 50, hours: 2), 12),
+      Activity(ActivityType.Walking, DateTime.now(), Duration(minutes: 15, hours: 8), 13),
+      Activity(ActivityType.Walking, DateTime.now(), Duration(minutes: 15, hours: 8), 13),
+      Activity(ActivityType.Walking, DateTime.now(), Duration(minutes: 15, hours: 8), 13),
+      Activity(ActivityType.Walking, DateTime.now(), Duration(minutes: 15, hours: 8), 13),
+      Activity(ActivityType.Walking, DateTime.now(), Duration(minutes: 15, hours: 8), 13)
     ];
   }
 
@@ -69,123 +84,209 @@ class _UserState extends State<UserWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
+    return Container(
+      child: Stack(
         children: <Widget>[
-          SizedBox(width: 30, height: 30,),
-          Row(
+          Column(
             children: <Widget>[
-              SizedBox(width: 30, height: 30),
-              ClipRRect(
+              Container(
+                padding: EdgeInsets.only(top: 30, bottom: 15),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  boxShadow: [BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 5,
+                    offset: Offset(2, 2),
+                  )],
+                ),
+                child: Row(
+                  children: <Widget>[
+                    SizedBox(width: 30, height: 30),
+                    ClipRRect(
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        child: Image(
+                          image: NetworkImage(user.imageUrl),
+                        ),
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(50.0)),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(left: 25, bottom: 10),
+                          child: Text(
+                            "${user.nickname}",
+                            style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 25, bottom: 15),
+                          child: Text(
+                            "${user.age} years old",
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                        Row(
+                            children: <Widget> [
+                              Container(
+                                child: FlatButton(
+                                  onPressed: (){},
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        "${user.followers.length}",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                      ),
+                                      Text("followers",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                child: FlatButton(
+                                  onPressed: (){},
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        "${user.following.length}",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                      ),
+                                      Text(
+                                        "following",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        ),)
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                child: FlatButton(
+                                  onPressed: (){
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context){ return HubListWidget(this.user.myHubs);}
+                                        )
+                                    );
+                                  },
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text(
+                                        "${user.myHubs.length}",
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold
+                                        ),
+                                      ),
+                                      Text("hubs",
+                                        style: TextStyle(
+                                            fontSize: 14
+                                        ),)
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ]
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              user == me ? SizedBox(width: 0, height: 0,) : !me.iFollow(user) ? FlatButton(
+                onPressed: () {
+                  setState ( () {
+                    me.addFollowing(user);
+                    user.addFollower(me);
+                  });
+                },
+                color: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
                 child: Container(
-                  height: 100,
-                  width: 100,
-                  child: Image(
-                    image: NetworkImage(user.imageUrl),
+                  child: Text(
+                    "Follow",
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(50.0)),
+              ) : FlatButton(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                    side: BorderSide(color: Colors.blue)
+                ),
+                onPressed: (){},
+                child: Container(
+                  child: Text(
+                    "Followed",
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.blue
+                    ),
+                  ),
+                ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    child: Text(
-                      "${user.nickname}",
-                      style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+              Container(
+                padding: EdgeInsets.only(top: 20, bottom: 20),
+                child: Text(
+                  "Recent activities",
+                  style: TextStyle(
+                    fontSize: 25,
                   ),
-                  Container(
-                    child: Text(
-                      "${user.age} years old",
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                  Row(
-                      children: <Widget> [
-                        Container(
-                          child: Align(
-                            child: FlatButton(
-                              onPressed: (){},
-                              child: Text(
-                                "${user.followers.length} followers",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                            alignment: Alignment.centerLeft,
-                          ),
-                        ),
-                        Container(
-                          child: Align(
-                            child: FlatButton(
-                              onPressed: (){},
-                              child: Text(
-                                "${user.following.length} following",
-                                style: TextStyle(
-                                    fontSize: 16
-                                ),
-                              ),
-                            ),
-                            alignment: Alignment.centerLeft,
-                          ),
-                        ),
-                      ]
-                  )
-                ],
-              )
+                ),
+              ),
             ],
           ),
-          user == me ? SizedBox(width: 0, height: 0,) : !me.iFollow(user) ? FlatButton(
-            onPressed: () {
-              setState ( () {
-                me.addFollowing(user);
-                user.addFollower(me);
-              });
-              },
-            color: Colors.blue,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-            ),
-          child: Container(
-            child: Text(
-              "Follow",
-                style: TextStyle(
-                  fontSize: 18,
+          DraggableScrollableSheet(
+
+            initialChildSize: 0.7,
+            maxChildSize: 0.7,
+            minChildSize: 0.7,
+            builder: (BuildContext context, ScrollController scrollController) {
+              return Container(
+                decoration: BoxDecoration(
                   color: Colors.white,
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
-            ),
-          ),
-        ) : FlatButton(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18.0),
-                side: BorderSide(color: Colors.blue)
-            ),
-            onPressed: (){},
-            child: Container(
-              child: Text(
-                  "Followed",
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.blue
+                child: ListView(
+                    controller: scrollController,
+                    children: me.pastActivities.map((activity){
+                      return ActivityTile(
+                        type: activity.type,
+                        duration: activity.actionDuration,
+                        date: activity.actionDate,
+                        length: activity.distance,
+                      );
+                    }).toList()
                 ),
-              ),
-            ),
+              );
+            },
           ),
-          Column(
-            children: me.pastActivities.map((activity){
-              return Text("${activity.type} (${activity.distance}km) on ${activity.actionDate.day}.${activity.actionDate.month}.${activity.actionDate.year}");
-            }).toList(),
-          )
-      ],
+        ],
       ),
     );
   }
