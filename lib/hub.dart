@@ -1,4 +1,4 @@
-import 'package:untitled_int20h_mobile_project/activities.dart';
+import 'activities.dart';
 
 import 'user.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class Hub{
   ActivityType type;
   List<User> participants;
 
-  Hub(int id, String name, ActivityType type, List<User> participants){
+  Hub({int id = 1, String name, ActivityType type = ActivityType.Walking, List<User> participants = const []}){
     this.id = id;
     this.name = name;
     this.type = type;

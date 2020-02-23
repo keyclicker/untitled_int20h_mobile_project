@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:untitled_int20h_mobile_project/activity_tile.dart';
+import 'activity_tile.dart';
 import 'activities.dart';
 import 'hub.dart';
+import 'server/client.dart';
 
 
 class User{
@@ -14,31 +15,38 @@ class User{
   List<Hub> myHubs;
 
 
-  User(String nick, int age){
+  User({String nick, int age = 0, weak = true}){
     this.nickname = nick;
     this.age = age;
     this.imageUrl = "https://u.o0bc.com/avatars/stock/_no-user-image.gif";
     this.following = [];
     this.followers = [];
-    this.myHubs = [
-      Hub(1, "EPAM Hub", ActivityType.Running, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-    ];
-    this.pastActivities = [
-      Activity(ActivityType.Cycling, DateTime.now(), Duration(minutes: 10, hours: 5), 10),
-      Activity(ActivityType.Running, DateTime.now(), Duration(minutes: 50, hours: 2), 12),
-      Activity(ActivityType.Walking, DateTime.now(), Duration(minutes: 15, hours: 8), 13),
-      Activity(ActivityType.Walking, DateTime.now(), Duration(minutes: 15, hours: 8), 13),
-      Activity(ActivityType.Walking, DateTime.now(), Duration(minutes: 15, hours: 8), 13),
-      Activity(ActivityType.Walking, DateTime.now(), Duration(minutes: 15, hours: 8), 13),
-      Activity(ActivityType.Walking, DateTime.now(), Duration(minutes: 15, hours: 8), 13)
-    ];
+    this.pastActivities = [];
+    this.myHubs = [];
+    if (!weak){
+      setHubs();
+    }
+  }
+
+  void setHubs() async {
+    List<String> hubs = await getUserHubs(this.nickname);
+
+    for (int i = 0; i < hubs.length; ++i){
+      HubResponce response = await getHub(hubs[i]);
+      Hub hub = Hub(name: response.title);
+      if (response.category == "Running"){
+        hub.type = ActivityType.Running;
+      } else if (response.category == "Walking"){
+        hub.type = ActivityType.Walking;
+      } else {
+        hub.type = ActivityType.Cycling;
+      }
+      var members = response.members;
+      for (int j = 0; j < members.length; ++j){
+        hub.participants.add(User(nick: members[j]));
+      }
+      this.myHubs.add(hub);
+    }
   }
 
   void addActivity(Activity activity){

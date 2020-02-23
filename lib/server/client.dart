@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 var host = 'http://10.0.2.2:4567/';
 var client = http.Client();
 
-class Achievement {
+class Achievement{
   String title;
   String description;
 
@@ -19,14 +19,14 @@ class Achievement {
   }
 }
 
-class Activity {
+class ActivityResponce {
   String category;
   String date;
   String time;
   String distanceValue;
   String distanceType;
 
-  Activity(String category, int date, int time, int distance)
+  ActivityResponce(String category, int date, int time, int distance)
   {
     this.category = category;
     var datetime = DateTime.fromMillisecondsSinceEpoch(date * 1000);
@@ -45,12 +45,12 @@ class Activity {
   }
 }
 
-class Hub {
+class HubResponce {
   String title;
   String category;
   List<String> members;
 
-  Hub(String title, String category, List<String> members)
+  HubResponce(String title, String category, List<String> members)
   {
     this.title = title;
     this.category = category;
@@ -140,16 +140,16 @@ Future<List<Achievement>> getAchievements(String username) async
   }
 }
 
-Future<List<Activity>> getActivities(String username) async
+Future<List<ActivityResponce>> getActivities(String username) async
 {
   var actvtGet = await client.get(host + '/user/' + username + '/activities');
   var statusCode = actvtGet.statusCode;
   if (statusCode == 200)
   {
-    List<Activity> responseList = List<Activity>();
+    List<ActivityResponce> responseList = List<ActivityResponce>();
     for (var activity in convert.json.decode(actvtGet.body)['list'])
     {
-      responseList.add(Activity(activity['competition'],
+      responseList.add(ActivityResponce(activity['competition'],
                                 activity['date'],
                                 activity['time'],
                                 activity['distance']));
@@ -162,9 +162,9 @@ Future<List<Activity>> getActivities(String username) async
   }
 }
 
-Future<Activity> getLastActivity(String username, String category) async
+Future<ActivityResponce> getLastActivity(String username, String category) async
 {
-  List<Activity> listActivity = await getActivities(username);
+  List<ActivityResponce> listActivity = await getActivities(username);
   for (var activity in listActivity.reversed)
   {
     if (activity.category == category)
@@ -172,7 +172,7 @@ Future<Activity> getLastActivity(String username, String category) async
       return activity;
     }
   }
-  Activity emptyActivity = Activity(category, 0, 0, 0);
+  ActivityResponce emptyActivity = ActivityResponce(category, 0, 0, 0);
 
   emptyActivity.distanceType = '';
   emptyActivity.distanceValue = 'N/A';
@@ -200,16 +200,16 @@ Future<List<String>> getUserHubs(String username) async
   }
 }
 
-Future<List<Hub>> getHubs() async
+Future<List<HubResponce>> getHubs() async
 {
   var hubsGet = await client.get(host + 'hubs');
   var statusCode = hubsGet.statusCode;
   if (statusCode == 200)
   {
-    List<Hub> responseList = List<Hub>();
+    List<HubResponce> responseList = List<HubResponce>();
     for (var hub in convert.json.decode(hubsGet.body).keys)
     {
-      responseList.add(Hub(hub,
+      responseList.add(HubResponce(hub,
                            convert.json.decode(hubsGet.body)[hub]['competition'],
                            []));
       for (var member in convert.json.decode(hubsGet.body)[hub]['members'])
@@ -222,6 +222,36 @@ Future<List<Hub>> getHubs() async
   else
   {
     return [];
+  }
+}
+
+Future<HubResponce> getHub(hub_name) async
+{
+  var hubsGet = await client.get(host + 'hubs');
+  var statusCode = hubsGet.statusCode;
+  if (statusCode == 200)
+  {
+    List<HubResponce> responseList = List<HubResponce>();
+    for (var hub in convert.json.decode(hubsGet.body).keys)
+    {
+      if (hub == hub_name)
+        {
+          var hub_info = HubResponce(hub_name,
+            convert.json.decode(hubsGet.body)["competition"],
+            []);
+          for (var member in convert.json.decode(hubsGet.body)[hub]['members'])
+          {
+            hub_info.members.add(member);
+          }
+          return hub_info;
+        }
+      return HubResponce("", "", []);
+    }
+    return HubResponce("", "", []);
+  }
+  else
+  {
+    return HubResponce("", "", []);
   }
 }
 

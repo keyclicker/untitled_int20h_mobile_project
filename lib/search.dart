@@ -24,9 +24,9 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   TextEditingController editingController = TextEditingController();
 
-  static User u = User("sasha", 3);
-  static User u1 = User("olega", 3);
-  static User me = User("igor", 3);
+  static User u = User(nick: "sasha", age: 3);
+  static User u1 = User(nick: "olega", age: 3);
+  static User me = User(nick: "igor", age: 3);
   List<User> allUsers = [u, u1];
 
   List<String> duplicateItems = List<String>(); //= List<String>.generate(10000, (i) => "Item $i");
