@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:untitled_int20h_mobile_project/activity_tile.dart';
 import 'activities.dart';
 import 'hub.dart';
+import 'package:untitled_int20h_mobile_project/server/client.dart';
 
 
 class User{
@@ -20,16 +21,8 @@ class User{
     this.imageUrl = "https://u.o0bc.com/avatars/stock/_no-user-image.gif";
     this.following = [];
     this.followers = [];
-    this.myHubs = [
-      Hub(1, "EPAM Hub", ActivityType.Running, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-      Hub(2, "Evo Hub", ActivityType.Walking, []),
-    ];
+    this.myHubs = ;
+    var x = getUserHubs(nick);
     this.pastActivities = [
       Activity(ActivityType.Cycling, DateTime.now(), Duration(minutes: 10, hours: 5), 10),
       Activity(ActivityType.Running, DateTime.now(), Duration(minutes: 50, hours: 2), 12),
