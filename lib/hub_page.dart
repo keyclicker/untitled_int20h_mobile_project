@@ -1,38 +1,93 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'activities.dart';
+import 'dart:math';
+
 class HubPage extends StatefulWidget {
   @override
   _HubPageState createState() => _HubPageState();
 }
 
 class _HubPageState extends State<HubPage> {
+  var rand = Random();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          Text("lom"),
-          Container(
-            color: Colors.red,
-            height: 200,
-            child: Row(
-              children: <Widget>[
-                Icon(Icons.directions_bike, size: 20,),
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding: EdgeInsets.only(top: 25),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: Offset(2, 2),
+                )]
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(width: 10),
+                  Icon(Icons.directions_bike,size: 150, color: Colors.black.withOpacity(0.8),),
+                  Column(
+                    children: <Widget>[
+                      Container(height: 20),
+                      Text("Running EVO hub",
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600
+                      )),
+                      Container(height: 7),
+                      Row(
+                        children: <Widget>[
+                          Text("40",
+                              style: TextStyle(
+                                  fontSize:20,
+                                  fontWeight: FontWeight.w600
+                              )),
+                          Text(" participants",
+                              style: TextStyle(
+                                  fontSize:20,
+                                  fontWeight: FontWeight.w400
+                              )),
+                        ],
+                      ),
+                      Container(height: 12),
+                      SizedBox(
+                        width: 175,
+                        child: RaisedButton(
+                          color: Colors.blueAccent,
+                          child: Text("Subscribe",
+                              style: TextStyle(
+                                  color: Colors.white,
+                              )),
+                          onPressed: () {
 
-              ],
+                          },
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ),
           ),
-          ListView.builder(
-              itemCount: 5,
-              itemBuilder: (context, index){
-                return ActivityRecord(
-                  type: ActivityType.Cycling,
-                length: 10,
-                    date: DateTime.now(),
-                    duration: Duration(minutes: 24),);
-              })
+          Expanded(
+            flex: 3,
+            child: ListView.builder(
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return ActivityRecord(
+                    length: rand.nextInt(500)/100,
+                  date: DateTime.now(),
+                    duration: Duration(seconds: rand.nextInt(500)),
+                  type: ActivityType.Running,);
+                }),
+          ),
         ],
       ),
     );
@@ -57,6 +112,7 @@ class ActivityRecord extends StatelessWidget {
 
   ActivityRecord({this.type, this.date, this.duration, this.length}) {
     subtitle = stringDate();
+
     if (type == ActivityType.Running) {
       title = "Running";
       icon = Icons.directions_run;

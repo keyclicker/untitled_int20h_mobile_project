@@ -21,7 +21,13 @@ class _ActivitiesState extends State<Activities> {
       children: <Widget>[
         Container(
           color: Colors.blue,
-          child: Timer(),
+          child: PageView(
+            children: <Widget>[
+              TimerWidget(type: ActivityType.Running),
+              TimerWidget(type: ActivityType.Walking),
+              TimerWidget(type: ActivityType.Cycling),
+            ],
+          )
         ),
         MyBottomSheet(),
       ],
@@ -40,7 +46,7 @@ class _MyBottomSheetState extends State<MyBottomSheet>{
     return SizedBox.expand(
       child: DraggableScrollableSheet(
         initialChildSize: 0.075,
-        maxChildSize: 0.55,
+        maxChildSize: 0.545,
         minChildSize: 0.075,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
@@ -74,10 +80,6 @@ class _MyBottomSheetState extends State<MyBottomSheet>{
                         )
                       ),
                     ),
-                    ActivityTile(type: ActivityType.Cycling,
-                      date: DateTime.now(),
-                      duration: Duration(minutes: 13),
-                      length: 3.5,),
                     ActivityTile(
                       type: ActivityType.Running,
                       date: DateTime.now(),
@@ -88,6 +90,10 @@ class _MyBottomSheetState extends State<MyBottomSheet>{
                       date: DateTime.now(),
                       duration: Duration(minutes: 42),
                       length: 0.2,),
+                    ActivityTile(type: ActivityType.Cycling,
+                      date: DateTime.now(),
+                      duration: Duration(minutes: 13),
+                      length: 3.5,),
                   ],
                 ),
           );
@@ -97,13 +103,19 @@ class _MyBottomSheetState extends State<MyBottomSheet>{
   }
 }
 
-class Timer extends StatefulWidget {
+class TimerWidget extends StatefulWidget {
+  ActivityType type;
+  TimerWidget({this.type});
+
   @override
-  _TimerState createState() => _TimerState();
+  _TimerWidgetState createState() => _TimerWidgetState(type: type);
 }
 
-class _TimerState extends State<Timer>{
+class _TimerWidgetState extends State<TimerWidget>{
   var stopwatch = new Stopwatch();
+
+  ActivityType type;
+  _TimerWidgetState({this.type});
 
   String timeToString(int time) {
     return "${time < 10 ? '0' : ''}$time";
@@ -112,20 +124,35 @@ class _TimerState extends State<Timer>{
   @override
   void initState() {
     super.initState();
-//    Timer.periodic(Duration(seconds: 1), (Timer t) {
-//      setState(() {
-//      });
-//    });
+    Timer.periodic(Duration(milliseconds: 1), (Timer t) {
+      setState(() {
+      });
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue,
+      color: (){
+        if(type == ActivityType.Running) return Colors.blue[450];
+        if(type == ActivityType.Walking) return Colors.teal;
+        if(type == ActivityType.Cycling) return Colors.redAccent;
+      }(),
       child: Center(
         child: Column(
           children: <Widget>[
-            Container(height: 80),
+            Container(height: 50),
+            Text((){
+              if(type == ActivityType.Running) return "Running";
+              if(type == ActivityType.Walking) return "Walking";
+              if(type == ActivityType.Cycling) return "Cycling";
+            }(),
+                style: TextStyle(
+                    fontSize: 50,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700
+                )),
+            Container(height: 8),
             Text(
             "${timeToString(stopwatch.elapsed.inMinutes)}:"
                 "${timeToString(stopwatch.elapsed.inSeconds-stopwatch.elapsed.inMinutes*60)}",
@@ -135,7 +162,7 @@ class _TimerState extends State<Timer>{
                 fontWeight: FontWeight.w400
               )
             ),
-            Container(height: 20),
+            Container(height: 15),
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(200),
@@ -145,13 +172,22 @@ class _TimerState extends State<Timer>{
                   spreadRadius: 2,
                   offset: Offset(3, 5),
                 )],
-                color: Colors.blueAccent
+                color: (){
+                  if(type == ActivityType.Running) return Colors.deepOrangeAccent;
+                  if(type == ActivityType.Walking) return Colors.orange[500];
+                  if(type == ActivityType.Cycling) return Colors.green[400];
+                }(),
               ),
               height: 60,
-              width: 60,
+              width: 180,
               child: FlatButton(
-                child: Icon(stopwatch.isRunning ? Icons.stop : Icons.play_arrow,
-                color: Colors.white),
+                child: Text(stopwatch.isRunning ? "Stop" : "Start",
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500
+                    )
+                ),
                 onPressed: () {
                   setState(() {
                     if (stopwatch.isRunning)
