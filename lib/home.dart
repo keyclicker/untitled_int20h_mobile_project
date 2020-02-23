@@ -28,7 +28,7 @@ class _MainPageState extends State<MainPage> {
     if (index == 0) {
       return Activities();
     } else if (index == 1) {
-      return MapPage();
+      return Search();
     } else {
       return Profile(me, me);
     }

@@ -5,6 +5,7 @@ import 'dart:math';
 import 'hub.dart';
 
 class HubPage extends StatefulWidget {
+
   Hub hub;
 
   HubPage(Hub hub){
@@ -12,26 +13,18 @@ class HubPage extends StatefulWidget {
   }
 
   @override
-  _HubPageState createState() => _HubPageState(hub);
+  _HubPageState createState() => _HubPageState(this.hub);
 }
 
 class _HubPageState extends State<HubPage> {
-  var rand = Random();
 
   Hub hub;
-  String type;
 
   _HubPageState(Hub hub){
     this.hub = hub;
-
-    if (hub.type == ActivityType.Cycling){
-      type = "Cycling";
-    } else if (hub.type == ActivityType.Running){
-      type = "Running";
-    } else {
-      type = "Walking";
-    }
   }
+
+  var rand = Random();
 
   @override
   Widget build(BuildContext context) {
@@ -98,18 +91,21 @@ class _HubPageState extends State<HubPage> {
               ),
             ),
           ),
-          ListView.builder(
-              itemCount: 5,
-              itemBuilder: (context, index){
-                return ActivityRecord(
-                  type: ActivityType.Cycling,
-                  length: 10,
-                  date: DateTime.now(),
-                  duration: Duration(minutes: 24),);
-              })
+          Expanded(
+            flex: 3,
+            child: ListView.builder(
+                itemCount: 3,
+                itemBuilder: (context, index) {
+                  return ActivityRecord(
+                    length: rand.nextInt(500)/100,
+                    date: DateTime.now(),
+                    duration: Duration(seconds: rand.nextInt(500)),
+                    type: ActivityType.Running,);
+                }),
+          ),
         ],
       ),
-    );;
+    );
   }
 }
 
