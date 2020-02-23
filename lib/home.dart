@@ -3,6 +3,7 @@ import 'activities.dart';
 import 'profile.dart';
 import 'search.dart';
 import 'user.dart';
+import 'map.dart';
 
 
 class MainPage extends StatefulWidget {
@@ -27,7 +28,7 @@ class _MainPageState extends State<MainPage> {
     if (index == 0) {
       return Activities();
     } else if (index == 1) {
-      return Search();
+      return MapPage();
     } else {
       return Profile(me, me);
     }

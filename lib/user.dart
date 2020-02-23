@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'activity.dart';
 import 'hub.dart';
-
+import 'dart:async';
 
 class User{
   String nickname;
