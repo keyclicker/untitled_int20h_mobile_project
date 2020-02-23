@@ -21,15 +21,15 @@ class ActivityTile extends StatelessWidget {
     if (type == ActivityType.Running) {
       title = "Running";
       icon = Icons.directions_run;
-      color = Colors.teal[300];
+      color = Colors.blue[300];
     } else if (type == ActivityType.Cycling) {
       title = "Cycling";
       icon = Icons.directions_bike;
-      color = Colors.blue[300];
+      color = Colors.redAccent[200];
     } else if (type == ActivityType.Walking) {
       title = "Walking";
       icon = Icons.directions_walk;
-      color = Colors.redAccent[200];
+      color = Colors.teal[300];
     }
   }
 
