@@ -3,6 +3,7 @@ import 'activities.dart';
 import 'user.dart';
 import 'package:flutter/material.dart';
 import 'activities.dart';
+import 'hub_page.dart';
 
 
 class Hub{
@@ -11,11 +12,15 @@ class Hub{
   ActivityType type;
   List<User> participants;
 
-  Hub({int id = 1, String name, ActivityType type = ActivityType.Walking, List<User> participants = const []}){
+  Hub({int id = 1, String name, ActivityType type = ActivityType.Walking, List<User> participants}){
     this.id = id;
     this.name = name;
     this.type = type;
-    this.participants = participants;
+    if (this.participants != null) {
+      this.participants = participants;
+    } else {
+      this.participants = [];
+    }
   }
 }
 
@@ -66,30 +71,35 @@ class _HubWidgetState extends State<HubWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: color,
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: color.withOpacity(0.3),
-              spreadRadius: 2,
-              blurRadius: 10,
-              offset: Offset(5, 5),
-            )
-          ]),
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      child: Center(
-        child: ListTile(
-          title: Text(title,
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: contentColor)),
-          subtitle: Text(subtitle,
-              style: TextStyle(fontSize: 12, color: contentColor)),
-          leading: Icon(icon, size: 40, color: contentColor),
+    return FlatButton(
+      onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => HubPage()));
+      },
+      child: Container(
+        height: 100,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: color,
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                color: color.withOpacity(0.3),
+                spreadRadius: 2,
+                blurRadius: 10,
+                offset: Offset(5, 5),
+              )
+            ]),
+        margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        child: Center(
+          child: ListTile(
+            title: Text(title,
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: contentColor)),
+            subtitle: Text(subtitle,
+                style: TextStyle(fontSize: 12, color: contentColor)),
+            leading: Icon(icon, size: 40, color: contentColor),
+          ),
         ),
       ),
     );
