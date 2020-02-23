@@ -13,7 +13,7 @@ void checkLogin(String nickname, String password, var context) async {
   print(nickname);
   if (await login(nickname, password)){
     UserInfo info = await getUserInfo(nickname);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(User(info.name, info.age))));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(User(nick: info.name, age: info.age))));
   }
 }
 
