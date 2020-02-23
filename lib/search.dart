@@ -24,10 +24,10 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   TextEditingController editingController = TextEditingController();
 
-  static User u = User(nick: "alex_rain992", age: 26, url:"https://biografii.net/wp-content/uploads/2018/11/1440161941-aleksandr-revva.jpg");
-  static User u1 = User(nick: "TerMiNaToRRR_ala", age: 12, url:"https://prm.ua/wp-content/uploads/2019/03/terminator-1024x576.jpg");
-  static User u2 = User(nick: "kaleo1998", age: 22, url:"http://radarmag.ru/wp-content/uploads/2018/07/2018.07.29-Kaleo-A2-24.jpg");
-  static User u3 = User(nick: "nadia_alladin", age: 18, url: "https://thoughtcatalog.files.wordpress.com/2018/05/questionstoaskagirl2.jpg?w=1920&h=1280&crop=1&resize=1920,1280&quality=95&strip=all");
+  static User u = User(nick: "alex_rain992", age: 26);
+  static User u1 = User(nick: "TerMiNaToRRR_ala", age: 12);
+  static User u2 = User(nick: "kaleo1998", age: 22);
+  static User u3 = User(nick: "nadia_alladin", age: 18);
   static User me = User(nick: "igor", age: 31);
   List<User> allUsers = [u, u1, u2, u3];
 
