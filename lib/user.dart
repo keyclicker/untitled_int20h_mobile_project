@@ -9,20 +9,16 @@ class User{
   String nickname;
   int age;
   String imageUrl;
-  List<Activity> pastActivities;
-  List<User> followers;
-  List<User> following;
-  List<Hub> myHubs;
+  List<Activity> pastActivities = [];
+  List<User> followers = [];
+  List<User> following = [];
+  List<Hub> myHubs = [];
 
 
   User({String nick, int age = 0, weak = true}){
     this.nickname = nick;
     this.age = age;
     this.imageUrl = "https://u.o0bc.com/avatars/stock/_no-user-image.gif";
-    this.following = [];
-    this.followers = [];
-    this.pastActivities = [];
-    this.myHubs = [];
     if (!weak){
       setHubs();
     }
@@ -34,9 +30,9 @@ class User{
     for (int i = 0; i < hubs.length; ++i){
       HubResponce response = await getHub(hubs[i]);
       Hub hub = Hub(name: response.title);
-      if (response.category == "Running"){
+      if (response.category == "running"){
         hub.type = ActivityType.Running;
-      } else if (response.category == "Walking"){
+      } else if (response.category == "walking"){
         hub.type = ActivityType.Walking;
       } else {
         hub.type = ActivityType.Cycling;
@@ -45,8 +41,13 @@ class User{
       for (int j = 0; j < members.length; ++j){
         hub.participants.add(User(nick: members[j]));
       }
-      this.myHubs.add(hub);
+      print("Hub " + hub.name + " " + hub.participants.length.toString());
+      addHub(hub);
     }
+  }
+
+  void addHub(Hub hub){
+    this.myHubs.add(hub);
   }
 
   void addActivity(Activity activity){
