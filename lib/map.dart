@@ -115,7 +115,7 @@ class MapPageState extends State<MapPage> {
     );
   }
 
-  return Scaffold(
+  return Column(children: <Widget>[ Scaffold(
     body: Stack(
       children: <Widget>[
         GoogleMap(
@@ -133,6 +133,9 @@ class MapPageState extends State<MapPage> {
             })
       ],
     ),
+  ),
+    Text('$distance(from, to)'),
+    ]
   );
   }
 
