@@ -3,13 +3,18 @@ import 'package:flutter/services.dart';
 import '../utilities/constants.dart';
 import '../home.dart';
 import '../user.dart';
+import '../hub.dart';
+import '../activities.dart';
 
 
 void checkLogin(String nickname, String password, var context) async {
   //print(await login(nickname, password));
   //if (await login(nickname, password)){
     //UserInfo info = await getUserInfo(nickname);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(User(nick: nickname))));
+    User usr = User(nick: nickname, age: 19);
+    usr.myHubs = [Hub(name: "EVO club", type: ActivityType.Running, participants: [usr])];
+    print(usr.myHubs[0].participants.length);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(usr)));
   //}
 }
 

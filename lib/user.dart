@@ -18,7 +18,6 @@ class User{
     this.nickname = nick;
     this.age = age;
     this.imageUrl = "https://u.o0bc.com/avatars/stock/_no-user-image.gif";
-    this.myHubs = [Hub(id:1, name: "EVO hub", type: ActivityType.Running, participants: [this])];
   }
 /*
   void setHubs() async {
@@ -191,7 +190,10 @@ class _UserState extends State<UserWidget> {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context){ return HubListWidget(this.user.myHubs);}
+                                            builder: (context){
+                                              print(this.user.myHubs[0].participants.length);
+                                              return HubListWidget(this.user.myHubs);
+                                            }
                                         )
                                     );
                                   },

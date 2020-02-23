@@ -1,39 +1,111 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lesson/miniUser.dart';
 import 'activities.dart';
+import 'hub.dart';
+import 'user.dart';
+
+
 class HubPage extends StatefulWidget {
+  Hub hub;
+
+  HubPage(Hub hub){
+    this.hub = hub;
+    this.hub.participants.sort((User left, User right){
+      double leftScore = 0;
+      double rightScore = 0;
+
+      for (int i = 0; i < left.pastActivities.length; ++i){
+        leftScore += left.pastActivities[i].distance;
+      }
+
+      for (int i = 0; i < right.pastActivities.length; ++i){
+        rightScore += right.pastActivities[i].distance;
+      }
+      return rightScore.compareTo(leftScore);
+    });
+  }
+
+
   @override
-  _HubPageState createState() => _HubPageState();
+  _HubPageState createState() => _HubPageState(hub);
 }
 
 class _HubPageState extends State<HubPage> {
+  Hub hub;
+
+  _HubPageState(Hub hub){
+    this.hub = hub;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Text("lom"),
-          Container(
-            color: Colors.red,
-            height: 200,
-            child: Row(
-              children: <Widget>[
-                Icon(Icons.directions_bike, size: 20,),
-
-              ],
+      body: SafeArea(
+        child: Stack(
+          children: <Widget> [
+            Container(
+              padding: EdgeInsets.only(left: 30, right: 30, top: 5),
+              margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.blue,
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.blue.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                      offset: Offset(5, 5),
+                    )
+                  ]),
+              child: Container(
+                color: Colors.blue,
+                height: 200,
+                child: Row(
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.only(left: 60,),
+                        child: Icon(Icons.directions_run, size: 30, color: Colors.white,)
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(left: 20),
+                      child: Text("${hub.name}",
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.white,
+                        ),),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
-          ListView.builder(
-              itemCount: 5,
-              itemBuilder: (context, index){
-                return ActivityRecord(
-                  type: ActivityType.Cycling,
-                length: 10,
-                    date: DateTime.now(),
-                    duration: Duration(minutes: 24),);
-              })
-        ],
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: DraggableScrollableSheet(
+                initialChildSize: 0.67,
+                maxChildSize: 0.67,
+                minChildSize: 0.67,
+                builder: (BuildContext context, ScrollController scrollController) {
+                  return Container(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    alignment: Alignment.bottomCenter,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                    ),
+                    child: ListView(
+                        controller: scrollController,
+                        children: hub.participants.map(
+                            (participant){ return MiniUserWidget(participant); }
+                        ).toList(),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ]
+        ),
       ),
     );
   }
@@ -98,49 +170,23 @@ class ActivityRecord extends StatelessWidget {
           subtitle: Text(subtitle,
               style: TextStyle(fontSize: 12, color: contentColor)),
           leading: Icon(icon, size: 40, color: contentColor),
-          trailing: _buildInfo(),
         ),
       ),
     );
   }
-
-  Widget _buildInfo() {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            Text("${duration.inMinutes}",
-                style: TextStyle(fontSize: 35, color: contentColor)),
-            Text("min", style: TextStyle(fontSize: 12, color: contentColor))
-          ],
-        ),
-        Container(
-          width: 20,
-        ),
-        Column(
-          children: <Widget>[
-            Text("${length}",
-                style: TextStyle(fontSize: 35, color: contentColor)),
-            Text("km", style: TextStyle(fontSize: 12, color: contentColor))
-          ],
-        )
-      ],
-    );
-  }
-
-  var months = <String>[
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "Octovber",
-    "November",
-    "December"
-  ];
 }
+
+var months = <String>[
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "Octovber",
+  "November",
+  "December"
+];

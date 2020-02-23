@@ -7,20 +7,14 @@ import 'hub_page.dart';
 
 
 class Hub{
-  int id;
   String name;
   ActivityType type;
   List<User> participants;
 
-  Hub({int id = 1, String name, ActivityType type = ActivityType.Walking, List<User> participants}){
-    this.id = id;
+  Hub({String name, ActivityType type = ActivityType.Walking, List<User> participants}){
     this.name = name;
     this.type = type;
-    if (this.participants != null) {
-      this.participants = participants;
-    } else {
-      this.participants = [];
-    }
+    this.participants = participants;
   }
 }
 
@@ -73,7 +67,7 @@ class _HubWidgetState extends State<HubWidget> {
   Widget build(BuildContext context) {
     return FlatButton(
       onPressed: (){
-        return Navigator.push(context, MaterialPageRoute(builder: (context) => HubPage()));
+        return Navigator.push(context, MaterialPageRoute(builder: (context) => HubPage(hub)));
       },
       child: Container(
         height: 100,
