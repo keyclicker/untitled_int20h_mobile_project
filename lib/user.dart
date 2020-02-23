@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:untitled_int20h_mobile_project/activity_tile.dart';
+import 'activity_tile.dart';
 import 'activities.dart';
 import 'hub.dart';
-import 'package:untitled_int20h_mobile_project/server/client.dart';
+import 'server/client.dart';
 
 
 class User{
@@ -15,7 +15,7 @@ class User{
   List<Hub> myHubs;
 
 
-  User({String nick, int age = 0}){
+  User({String nick, int age = 0, weak = true}){
     this.nickname = nick;
     this.age = age;
     this.imageUrl = "https://u.o0bc.com/avatars/stock/_no-user-image.gif";
@@ -23,12 +23,14 @@ class User{
     this.followers = [];
     this.pastActivities = [];
     this.myHubs = [];
-    setHubs();
+    if (!weak){
+      setHubs();
+    }
   }
 
   void setHubs() async {
-    print(this.nickname);
     List<String> hubs = await getUserHubs(this.nickname);
+
     for (int i = 0; i < hubs.length; ++i){
       HubResponce response = await getHub(hubs[i]);
       Hub hub = Hub(name: response.title);

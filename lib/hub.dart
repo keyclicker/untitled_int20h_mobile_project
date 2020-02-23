@@ -1,4 +1,4 @@
-import 'package:untitled_int20h_mobile_project/activities.dart';
+import 'activities.dart';
 
 import 'user.dart';
 import 'package:flutter/material.dart';
