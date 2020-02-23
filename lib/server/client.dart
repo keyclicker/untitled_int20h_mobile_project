@@ -5,7 +5,7 @@ import 'dart:convert' as convert;
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
-var host = 'http://10.0.2.2:4567/';
+var host = 'http://127.0.0.1:4567/';
 var client = http.Client();
 
 class Achievement{
