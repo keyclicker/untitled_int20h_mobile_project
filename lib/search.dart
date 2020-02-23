@@ -25,8 +25,8 @@ class _SearchPageState extends State<SearchPage> {
   TextEditingController editingController = TextEditingController();
 
   static User u = User(nick: "alex_rain992", age: 26);
-  static User u1 = User(nick: "TerMiNaToRRR_ala", age: 12);
-  static User u2 = User(nick: "kaleo1998", age: 22);
+  static User u1 = User(nick: "TerMiNaToRRR_ala", age: 12, );
+  static User u2 = User(nick: "kaleo1998", age: 22, );
   static User u3 = User(nick: "nadia_alladin", age: 18);
   static User me = User(nick: "igor", age: 31);
   List<User> allUsers = [u, u1, u2, u3];

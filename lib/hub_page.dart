@@ -2,14 +2,36 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'activities.dart';
 import 'dart:math';
+import 'hub.dart';
 
 class HubPage extends StatefulWidget {
+  Hub hub;
+
+  HubPage(Hub hub){
+    this.hub = hub;
+  }
+
   @override
-  _HubPageState createState() => _HubPageState();
+  _HubPageState createState() => _HubPageState(hub);
 }
 
 class _HubPageState extends State<HubPage> {
   var rand = Random();
+
+  Hub hub;
+  String type;
+
+  _HubPageState(Hub hub){
+    this.hub = hub;
+
+    if (hub.type == ActivityType.Cycling){
+      type = "Cycling";
+    } else if (hub.type == ActivityType.Running){
+      type = "Running";
+    } else {
+      type = "Walking";
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +43,12 @@ class _HubPageState extends State<HubPage> {
             child: Container(
               padding: EdgeInsets.only(top: 25),
               decoration: BoxDecoration(
-                color: Colors.white,
-                boxShadow: [BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 10,
-                  offset: Offset(2, 2),
-                )]
+                  color: Colors.white,
+                  boxShadow: [BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 10,
+                    offset: Offset(2, 2),
+                  )]
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -36,11 +58,11 @@ class _HubPageState extends State<HubPage> {
                   Column(
                     children: <Widget>[
                       Container(height: 20),
-                      Text("Running EVO hub",
-                      style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w600
-                      )),
+                      Text("${hub.name}",
+                          style: TextStyle(
+                              fontSize: 30,
+                              fontWeight: FontWeight.w600
+                          )),
                       Container(height: 7),
                       Row(
                         children: <Widget>[
@@ -63,7 +85,7 @@ class _HubPageState extends State<HubPage> {
                           color: Colors.blueAccent,
                           child: Text("Subscribe",
                               style: TextStyle(
-                                  color: Colors.white,
+                                color: Colors.white,
                               )),
                           onPressed: () {
 
@@ -81,13 +103,13 @@ class _HubPageState extends State<HubPage> {
               itemBuilder: (context, index){
                 return ActivityRecord(
                   type: ActivityType.Cycling,
-                length: 10,
-                    date: DateTime.now(),
-                    duration: Duration(minutes: 24),);
+                  length: 10,
+                  date: DateTime.now(),
+                  duration: Duration(minutes: 24),);
               })
         ],
       ),
-    );
+    );;
   }
 }
 

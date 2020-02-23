@@ -67,7 +67,7 @@ class _HubWidgetState extends State<HubWidget> {
   Widget build(BuildContext context) {
     return FlatButton(
       onPressed: (){
-        return Navigator.push(context, MaterialPageRoute(builder: (context) => HubPage(hub)));
+        return Navigator.push(context, MaterialPageRoute(builder: (context) => HubPage(this.hub)));
       },
       child: Container(
         height: 100,
