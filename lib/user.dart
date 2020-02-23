@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'activity_tile.dart';
 import 'activities.dart';
 import 'hub.dart';
-import 'server/client.dart';
 
 
 class User{
@@ -15,17 +14,13 @@ class User{
   List<Hub> myHubs = [];
 
 
-  User({String nick, int age = 0, weak = true}){
+  User({String nick, int age = 0}){
     this.nickname = nick;
     this.age = age;
     this.imageUrl = "https://u.o0bc.com/avatars/stock/_no-user-image.gif";
-    if (!weak){
-      setHubs();
-    }
-
     this.myHubs = [Hub(id:1, name: "EVO hub", type: ActivityType.Running, participants: [this])];
   }
-
+/*
   void setHubs() async {
     List<String> hubs = await getUserHubs(this.nickname);
 
@@ -46,7 +41,7 @@ class User{
       print("Hub " + hub.name + " " + hub.participants.length.toString());
       addHub(hub);
     }
-  }
+  }*/
 
   void addHub(Hub hub){
     this.myHubs.add(hub);

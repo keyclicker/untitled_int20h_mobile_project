@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../utilities/constants.dart';
 import '../home.dart';
-import '../server/client.dart';
 import '../user.dart';
 
 
@@ -10,7 +9,7 @@ void checkLogin(String nickname, String password, var context) async {
   //print(await login(nickname, password));
   //if (await login(nickname, password)){
     //UserInfo info = await getUserInfo(nickname);
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(User(nick: nickname, weak: false))));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(User(nick: nickname))));
   //}
 }
 
