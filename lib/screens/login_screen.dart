@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:untitled_int20h_mobile_project/utilities/constants.dart';
 import 'package:untitled_int20h_mobile_project/home.dart';
+import 'package:untitled_int20h_mobile_project/server/client.dart';
 import 'package:untitled_int20h_mobile_project/user.dart';
 
 
-void checkLogin(String nickname, String password, var context){
-  Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(User(nickname, 14))));
+void checkLogin(String nickname, String password, var context) async {
+  print(1);
+  print(await login(nickname, password));
+  print(password);
+  print(nickname);
+  if (await login(nickname, password)){
+    UserInfo info = await getUserInfo(nickname);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(User(info.name, info.age))));
+  }
 }
 
 
@@ -17,6 +25,7 @@ class LoginScreen extends StatefulWidget {
 
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool failedLogin = false;
   bool _rememberMe = false;
   String password = "";
   String nickname = "";

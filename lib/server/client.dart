@@ -5,7 +5,7 @@ import 'dart:convert' as convert;
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
-var host = 'http://127.0.0.1:5000/';
+var host = 'http://10.0.2.2:4567/';
 var client = http.Client();
 
 class Achievement {
@@ -76,6 +76,7 @@ Future<bool> login(String username, String password) async
   var loginRequest = await client.post(host + 'login',
       body: convert.json.encode({'username': username, 'password': password}),
       headers: {'Content-Type': 'application/json'});
+  print(1);
   var statusCode = loginRequest.statusCode;
   if (statusCode == 200)
   {
