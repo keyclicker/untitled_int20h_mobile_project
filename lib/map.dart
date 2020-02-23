@@ -3,6 +3,7 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'dart:async';
+import 'dart:math';
 
 const double CAMERA_ZOOM = 16;
 const double CAMERA_TILT = 0;
@@ -17,6 +18,7 @@ class MapPage extends StatefulWidget {
 }
 
 class MapPageState extends State<MapPage> {
+  double dist = 0;
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> _markers = Set<Marker>();// for my drawn routes on the map
   Set<Polyline> _polylines = Set<Polyline>();
@@ -30,6 +32,29 @@ class MapPageState extends State<MapPage> {
   LocationData destinationLocation;// wrapper around the location API
   Location location;
 
+  double distance(LocationData from, LocationData to) {
+    const double pi = 3.1415926;
+    const rad = 6372795;
+
+    double lat1 = from.latitude * pi / 180;
+    double lat2 = to.latitude * pi / 180;
+    double long1 = from.longitude * pi / 180;
+    double long2 = to.longitude * pi / 180;
+
+    double cl1 = cos(lat1);
+    double cl2 = cos(lat2);
+    double sl1 = sin(lat1);
+    double sl2 = sin(lat2);
+    double delta = long2 - long1;
+    double cdelta = cos(delta);
+    double sdelta = sin(delta);
+
+    double y = sqrt(pow(cl2*sdelta,2) + pow(cl1*sl2-sl1*cl2*cdelta,2));
+    double x = sl1 * sl2 + cl1 * cl2 * cdelta;
+    double ad = atan2(y, x);
+
+    return ad*rad;
+  }
 
   @override
   void initState() {
@@ -131,17 +156,24 @@ class MapPageState extends State<MapPage> {
     setPolylines();
   }
 
-  void setPolylines() async {   List<PointLatLng> result = await polylinePoints.getRouteBetweenCoordinates(
+  void setPolylines() async {
+    List<PointLatLng> result = await polylinePoints.getRouteBetweenCoordinates(
       googleAPIKey,
       currentLocation.latitude,
       currentLocation.longitude,
       destinationLocation.latitude,
-      destinationLocation.longitude);   if(result.isNotEmpty){
-    result.forEach((PointLatLng point){
+      destinationLocation.longitude);
+      dist += distance(currentLocation, destinationLocation);
+      print(dist);
+    //print("PATH:");
+    //print(result);
+    if (result.isNotEmpty) {
+      result.forEach((PointLatLng point){
       polylineCoordinates.add(
           LatLng(point.latitude,point.longitude)
       );
-    });     setState(() {
+      });
+      setState(() {
       _polylines.add(Polyline(
           width: 5, // set the width of the polylines
           polylineId: PolylineId("poly"),
