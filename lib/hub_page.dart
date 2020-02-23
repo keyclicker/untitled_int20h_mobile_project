@@ -1,111 +1,91 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lesson/miniUser.dart';
 import 'activities.dart';
-import 'hub.dart';
-import 'user.dart';
-
+import 'dart:math';
 
 class HubPage extends StatefulWidget {
-  Hub hub;
-
-  HubPage(Hub hub){
-    this.hub = hub;
-    this.hub.participants.sort((User left, User right){
-      double leftScore = 0;
-      double rightScore = 0;
-
-      for (int i = 0; i < left.pastActivities.length; ++i){
-        leftScore += left.pastActivities[i].distance;
-      }
-
-      for (int i = 0; i < right.pastActivities.length; ++i){
-        rightScore += right.pastActivities[i].distance;
-      }
-      return rightScore.compareTo(leftScore);
-    });
-  }
-
-
   @override
-  _HubPageState createState() => _HubPageState(hub);
+  _HubPageState createState() => _HubPageState();
 }
 
 class _HubPageState extends State<HubPage> {
-  Hub hub;
-
-  _HubPageState(Hub hub){
-    this.hub = hub;
-  }
-
+  var rand = Random();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: <Widget> [
-            Container(
-              padding: EdgeInsets.only(left: 30, right: 30, top: 5),
-              margin: EdgeInsets.only(left: 20, right: 20, top: 20),
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding: EdgeInsets.only(top: 25),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  color: Colors.blue,
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.blue.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 10,
-                      offset: Offset(5, 5),
-                    )
-                  ]),
-              child: Container(
-                color: Colors.blue,
-                height: 200,
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(left: 60,),
-                        child: Icon(Icons.directions_run, size: 30, color: Colors.white,)
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 20),
-                      child: Text("${hub.name}",
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                        ),),
-                    ),
-                  ],
-                ),
+                color: Colors.white,
+                boxShadow: [BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: Offset(2, 2),
+                )]
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  Container(width: 10),
+                  Icon(Icons.directions_bike,size: 150, color: Colors.black.withOpacity(0.8),),
+                  Column(
+                    children: <Widget>[
+                      Container(height: 20),
+                      Text("Running EVO hub",
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w600
+                      )),
+                      Container(height: 7),
+                      Row(
+                        children: <Widget>[
+                          Text("40",
+                              style: TextStyle(
+                                  fontSize:20,
+                                  fontWeight: FontWeight.w600
+                              )),
+                          Text(" participants",
+                              style: TextStyle(
+                                  fontSize:20,
+                                  fontWeight: FontWeight.w400
+                              )),
+                        ],
+                      ),
+                      Container(height: 12),
+                      SizedBox(
+                        width: 175,
+                        child: RaisedButton(
+                          color: Colors.blueAccent,
+                          child: Text("Subscribe",
+                              style: TextStyle(
+                                  color: Colors.white,
+                              )),
+                          onPressed: () {
+
+                          },
+                        ),
+                      )
+                    ],
+                  )
+                ],
               ),
             ),
-            Container(
-              alignment: Alignment.bottomCenter,
-              child: DraggableScrollableSheet(
-                initialChildSize: 0.67,
-                maxChildSize: 0.67,
-                minChildSize: 0.67,
-                builder: (BuildContext context, ScrollController scrollController) {
-                  return Container(
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                    alignment: Alignment.bottomCenter,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                    ),
-                    child: ListView(
-                        controller: scrollController,
-                        children: hub.participants.map(
-                            (participant){ return MiniUserWidget(participant); }
-                        ).toList(),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ]
-        ),
+          ),
+          ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index){
+                return ActivityRecord(
+                  type: ActivityType.Cycling,
+                length: 10,
+                    date: DateTime.now(),
+                    duration: Duration(minutes: 24),);
+              })
+        ],
       ),
     );
   }
@@ -129,6 +109,7 @@ class ActivityRecord extends StatelessWidget {
 
   ActivityRecord({this.type, this.date, this.duration, this.length}) {
     subtitle = stringDate();
+
     if (type == ActivityType.Running) {
       title = "Running";
       icon = Icons.directions_run;
@@ -170,23 +151,49 @@ class ActivityRecord extends StatelessWidget {
           subtitle: Text(subtitle,
               style: TextStyle(fontSize: 12, color: contentColor)),
           leading: Icon(icon, size: 40, color: contentColor),
+          trailing: _buildInfo(),
         ),
       ),
     );
   }
-}
 
-var months = <String>[
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "Octovber",
-  "November",
-  "December"
-];
+  Widget _buildInfo() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            Text("${duration.inMinutes}",
+                style: TextStyle(fontSize: 35, color: contentColor)),
+            Text("min", style: TextStyle(fontSize: 12, color: contentColor))
+          ],
+        ),
+        Container(
+          width: 20,
+        ),
+        Column(
+          children: <Widget>[
+            Text("${length}",
+                style: TextStyle(fontSize: 35, color: contentColor)),
+            Text("km", style: TextStyle(fontSize: 12, color: contentColor))
+          ],
+        )
+      ],
+    );
+  }
+
+  var months = <String>[
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "Octovber",
+    "November",
+    "December"
+  ];
+}
