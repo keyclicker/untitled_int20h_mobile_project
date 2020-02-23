@@ -2,6 +2,14 @@ import 'package:flutter/material.dart';
 import 'activity_tile.dart';
 import 'activities.dart';
 import 'hub.dart';
+import 'server/client.dart';
+
+
+var ActivityTypesDict = {
+  "running": ActivityType.Running,
+  "cycling": ActivityType.Cycling,
+  "walking": ActivityType.Walking
+};
 
 
 class User{
@@ -14,17 +22,41 @@ class User{
   List<Hub> myHubs = [];
 
 
-  User({String nick, int age = 0}){
+  User({String nick, int age = 0, weak = true}){
     this.nickname = nick;
     this.age = age;
+    this.pastActivities = [
+      Activity(
+        ActivityType.Running,
+        DateTime.now(),
+        Duration(minutes: 14, seconds: 55),
+        3.2
+      ),
+      Activity(
+        ActivityType.Cycling,
+        DateTime.utc(2020, 02, 12, 13, 0, 0),
+        Duration(minutes: 55, seconds: 30),
+        25
+      )
+    ];
+    this.myHubs = [
+      Hub(name: "Evo sport club", type: ActivityType.Running, participants: [this]),
+      Hub(name: "BetterME", type: ActivityType.Cycling, participants: [this]),
+    ];
+    this.followers = [];
+    this.following = [];
     this.imageUrl = "https://u.o0bc.com/avatars/stock/_no-user-image.gif";
+    if (!weak){
+      setHubs();
+      setActivities();
+    }
   }
-/*
+
   void setHubs() async {
     List<String> hubs = await getUserHubs(this.nickname);
 
     for (int i = 0; i < hubs.length; ++i){
-      HubResponce response = await getHub(hubs[i]);
+      HubResponse response = await getHub(hubs[i]);
       Hub hub = Hub(name: response.title);
       if (response.category == "running"){
         hub.type = ActivityType.Running;
@@ -40,7 +72,24 @@ class User{
       print("Hub " + hub.name + " " + hub.participants.length.toString());
       addHub(hub);
     }
-  }*/
+  }
+
+
+  void setActivities() async {
+    List<ActivityResponse> activities = await getActivities(this.nickname);
+
+
+    for (var activity in activities){
+      List<String> durationParts = activity.time.split(":");
+      Activity act = Activity(
+        ActivityTypesDict[activity.category],
+        DateTime.parse(activity.date),
+      Duration(minutes: int.parse(durationParts[0]), seconds: int.parse(durationParts[1])),
+      double.parse(activity.distanceValue));
+
+      pastActivities.add(act);
+    }
+  }
 
   void addHub(Hub hub){
     this.myHubs.add(hub);

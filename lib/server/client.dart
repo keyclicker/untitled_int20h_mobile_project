@@ -1,33 +1,29 @@
-/*
-import 'dart:ffi';
-import 'dart:typed_data';
-import 'dart:math' as math;
 import 'dart:convert' as convert;
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 
-var host = 'http://217.61.1.129/';
+var host = 'http://217.61.1.129:8888/';
 var client = http.Client();
 
-class Achievement{
-  String title;
-  String description;
+class Achievement {
+  String name;
+  bool value;
 
-  Achievement(String title, String description)
+  Achievement(String name, bool value)
   {
-    this.title = title;
-    this.description = title;
+    this.name = name;
+    this.value = value;
   }
 }
 
-class ActivityResponce {
+class ActivityResponse {
   String category;
   String date;
   String time;
   String distanceValue;
   String distanceType;
 
-  ActivityResponce(String category, int date, int time, int distance)
+  ActivityResponse(String category, int date, int time, int distance)
   {
     this.category = category;
     var datetime = DateTime.fromMillisecondsSinceEpoch(date * 1000);
@@ -46,12 +42,12 @@ class ActivityResponce {
   }
 }
 
-class HubResponce {
+class HubResponse {
   String title;
   String category;
   List<String> members;
 
-  HubResponce(String title, String category, List<String> members)
+  HubResponse(String title, String category, List<String> members)
   {
     this.title = title;
     this.category = category;
@@ -77,7 +73,6 @@ Future<bool> login(String username, String password) async
   var loginRequest = await client.post(host + 'login',
       body: convert.json.encode({'username': username, 'password': password}),
       headers: {'Content-Type': 'application/json'});
-  print(1);
   var statusCode = loginRequest.statusCode;
   if (statusCode == 200)
   {
@@ -89,35 +84,55 @@ Future<bool> login(String username, String password) async
   }
 }
 
-Future<bool> follow(String follower, String user) async
+void follow(String follower, String user) async
 {
   var followPost = await client.post(host + 'user/' + follower + '/following',
       body: convert.json.encode({'user': user}),
       headers: {'Content-Type': 'application/json'});
-  var statusCode = followPost.statusCode;
-  if (statusCode == 200)
-  {
-    return true;
-  }
-  else
-  {
-    return false;
-  }
 }
 
-Future<bool> unfollow(String follower, String user) async
+void unfollow(String follower, String user) async
 {
   var followPost = await client.put(host + 'user/' + follower + '/following',
       body: convert.json.encode({'user': user}),
       headers: {'Content-Type': 'application/json'});
-  var statusCode = followPost.statusCode;
+}
+
+Future<List<String>> getFollowers(username) async
+{
+  var followersReq = await client.get(host + 'user/' + username + '/followers');
+  var statusCode = followersReq.statusCode;
   if (statusCode == 200)
   {
-    return true;
+    List<String> responseList = List<String>();
+    for (var follower in convert.json.decode(followersReq.body)['list'])
+    {
+      responseList.add(follower);
+    }
+    return responseList;
   }
   else
   {
-    return false;
+    return [];
+  }
+}
+
+Future<List<String>> getFollowing(username) async
+{
+  var followingReq = await client.get(host + 'user/' + username + '/following');
+  var statusCode = followingReq.statusCode;
+  if (statusCode == 200)
+  {
+    List<String> responseList = List<String>();
+    for (var following in convert.json.decode(followingReq.body)['list'])
+    {
+      responseList.add(following);
+    }
+    return responseList;
+  }
+  else
+  {
+    return [];
   }
 }
 
@@ -128,10 +143,10 @@ Future<List<Achievement>> getAchievements(String username) async
   if (statusCode == 200)
   {
     var responseList = List<Achievement>();
-    for (var achievement in convert.json.decode(achvmGet.body)['list'])
+    for (var achievement in convert.json.decode(achvmGet.body)['list'].keys)
     {
-      responseList.add(Achievement(achievement.keys.first,
-                                   achievement.values.first));
+      responseList.add(Achievement(achievement,
+          convert.json.decode(achvmGet.body)['list'][achievement]));
     }
     return responseList;
   }
@@ -141,19 +156,26 @@ Future<List<Achievement>> getAchievements(String username) async
   }
 }
 
-Future<List<ActivityResponce>> getActivities(String username) async
+void addAchievement(String username, Achievement achievm) async
 {
-  var actvtGet = await client.get(host + '/user/' + username + '/activities');
+  var achvmPost = await client.post(host + 'user/' + username + '/achievements',
+      headers: {"Content-Type": "application/json"},
+      body: convert.json.encode({'name': true}));
+}
+
+Future<List<ActivityResponse>> getActivities(String username) async
+{
+  var actvtGet = await client.get(host + 'user/' + username + '/activities');
   var statusCode = actvtGet.statusCode;
   if (statusCode == 200)
   {
-    List<ActivityResponce> responseList = List<ActivityResponce>();
+    List<ActivityResponse> responseList = List<ActivityResponse>();
     for (var activity in convert.json.decode(actvtGet.body)['list'])
     {
-      responseList.add(ActivityResponce(activity['competition'],
-                                activity['date'],
-                                activity['time'],
-                                activity['distance']));
+      responseList.add(ActivityResponse(activity['category'],
+          activity['date'],
+          activity['time'],
+          activity['distance']));
     }
     return responseList;
   }
@@ -163,9 +185,18 @@ Future<List<ActivityResponce>> getActivities(String username) async
   }
 }
 
-Future<ActivityResponce> getLastActivity(String username, String category) async
+void addActivity(String username, String category, int time, int distance) async
 {
-  List<ActivityResponce> listActivity = await getActivities(username);
+  var achvmPost = client.post(host + 'user/' + username + '/activities',
+      headers: {"Content-Type": "application/json"},
+      body: convert.json.encode({'category': category,
+        'date': DateTime.now().millisecondsSinceEpoch / 1000,
+        'distance': distance}));
+}
+
+Future<ActivityResponse> getLastActivity(String username, String category) async
+{
+  List<ActivityResponse> listActivity = await getActivities(username);
   for (var activity in listActivity.reversed)
   {
     if (activity.category == category)
@@ -173,7 +204,7 @@ Future<ActivityResponce> getLastActivity(String username, String category) async
       return activity;
     }
   }
-  ActivityResponce emptyActivity = ActivityResponce(category, 0, 0, 0);
+  ActivityResponse emptyActivity = ActivityResponse(category, 0, 0, 0);
 
   emptyActivity.distanceType = '';
   emptyActivity.distanceValue = 'N/A';
@@ -201,18 +232,18 @@ Future<List<String>> getUserHubs(String username) async
   }
 }
 
-Future<List<HubResponce>> getHubs() async
+Future<List<HubResponse>> getHubs() async
 {
   var hubsGet = await client.get(host + 'hubs');
   var statusCode = hubsGet.statusCode;
   if (statusCode == 200)
   {
-    List<HubResponce> responseList = List<HubResponce>();
+    List<HubResponse> responseList = List<HubResponse>();
     for (var hub in convert.json.decode(hubsGet.body).keys)
     {
-      responseList.add(HubResponce(hub,
-                           convert.json.decode(hubsGet.body)[hub]['competition'],
-                           []));
+      responseList.add(HubResponse(hub,
+          convert.json.decode(hubsGet.body)[hub]['competition'],
+          []));
       for (var member in convert.json.decode(hubsGet.body)[hub]['members'])
       {
         responseList.last.members.add(member);
@@ -226,33 +257,25 @@ Future<List<HubResponce>> getHubs() async
   }
 }
 
-Future<HubResponce> getHub(hub_name) async
+Future<HubResponse> getHub(hub_name) async
 {
-  var hubsGet = await client.get(host + 'hubs');
+  var hubsGet = await client.get(host + 'hubs/' + hub_name);
   var statusCode = hubsGet.statusCode;
   if (statusCode == 200)
   {
-    List<HubResponce> responseList = List<HubResponce>();
-    for (var hub in convert.json.decode(hubsGet.body).keys)
+    print(convert.json.decode(hubsGet.body));
+    var hub_info = HubResponse(hub_name,
+        convert.json.decode(hubsGet.body)["category"],
+        []);
+    for (var member in convert.json.decode(hubsGet.body)['members'])
     {
-      if (hub == hub_name)
-        {
-          var hub_info = HubResponce(hub_name,
-            convert.json.decode(hubsGet.body)["competition"],
-            []);
-          for (var member in convert.json.decode(hubsGet.body)[hub]['members'])
-          {
-            hub_info.members.add(member);
-          }
-          return hub_info;
-        }
-      return HubResponce("", "", []);
+      hub_info.members.add(member);
     }
-    return HubResponce("", "", []);
+    return hub_info;
   }
   else
   {
-    return HubResponce("", "", []);
+    return HubResponse("", "", []);
   }
 }
 
@@ -263,12 +286,16 @@ Future<UserInfo> getUserInfo(String username) async
   if (statusCode == 200)
   {
     return UserInfo(convert.json.decode(infoGet.body)['name'],
-                    convert.json.decode(infoGet.body)['age'],
-                    convert.json.decode(infoGet.body)['picture']);
+        convert.json.decode(infoGet.body)['age'],
+        convert.json.decode(infoGet.body)['picture']);
   }
   else
   {
     return UserInfo('', 0, '');
   }
 }
-*/
+
+void main() async
+{
+  var a = await getHub("hackaton");
+}
