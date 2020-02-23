@@ -1,4 +1,4 @@
-name: untitled_int20h_mobile_project
+name: lesson
 description: A new Flutter project.
 
 # The following defines the version and build number for your application.
@@ -17,7 +17,6 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  google_maps_flutter: any
   flutter:
     sdk: flutter
 
