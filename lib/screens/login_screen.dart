@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:untitled_int20h_mobile_project/utilities/constants.dart';
 import 'package:untitled_int20h_mobile_project/home.dart';
+import 'package:untitled_int20h_mobile_project/server/client.dart';
 import 'package:untitled_int20h_mobile_project/user.dart';
 
 
-void checkLogin(String nickname, String password, var context){
-  Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(User(nickname, 14))));
+void checkLogin(String nickname, String password, var context) async {
+  print(1);
+  print(await login(nickname, password));
+  print(password);
+  print(nickname);
+  if (await login(nickname, password)){
+    UserInfo info = await getUserInfo(nickname);
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(User(info.name, info.age))));
+  }
 }
 
 
@@ -17,9 +25,12 @@ class LoginScreen extends StatefulWidget {
 
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool failedLogin = false;
   bool _rememberMe = false;
   String password = "";
   String nickname = "";
+  TextEditingController nickController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   Widget _buildNicknameTF() {
     return Column(
@@ -35,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
-            onSubmitted: (String input){ nickname = input;},
+            controller: nickController,
             keyboardType: TextInputType.text,
             style: TextStyle(
               color: Colors.white,
@@ -71,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
           decoration: kBoxDecorationStyle,
           height: 60.0,
           child: TextField(
-            onSubmitted: (String input){ password = input;},
+            controller: passwordController,
             obscureText: true,
             style: TextStyle(
               color: Colors.white,
@@ -100,11 +111,11 @@ class _LoginScreenState extends State<LoginScreen> {
       child: Row(
         children: <Widget>[
           Theme(
-            data: ThemeData(unselectedWidgetColor: Colors.white),
+            data: ThemeData(unselectedWidgetColor: Colors.blue),
             child: Checkbox(
               value: _rememberMe,
               checkColor: Colors.green,
-              activeColor: Colors.white,
+              activeColor: Colors.blue,
               onChanged: (value) {
                 setState(() {
 
@@ -129,13 +140,15 @@ class _LoginScreenState extends State<LoginScreen> {
       child: RaisedButton(
         elevation: 5.0,
         onPressed: () {
-          return checkLogin(nickname, password, context);
+          print(nickController);
+          print(passwordController);
+          return checkLogin(nickController.text, passwordController.text, context);
         },
         padding: EdgeInsets.all(15.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
-        color: Colors.white,
+        color: Colors.blue,
         child: Text(
           'LOGIN',
           style: TextStyle(
@@ -168,10 +181,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Color(0xFF73AEF5),
-                      Color(0xFF61A4F1),
-                      Color(0xFF478DE0),
-                      Color(0xFF398AE5),
+                      Colors.white,
+                      Colors.white,
+                      Colors.white,
+                      Colors.white,
                     ],
                     stops: [0.1, 0.4, 0.7, 0.9],
                   ),
@@ -191,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Text(
                         'Sign In',
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.blue,
                           fontFamily: 'OpenSans',
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,

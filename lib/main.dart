@@ -4,7 +4,6 @@ import 'profile.dart';
 import 'search.dart';
 import 'screens/login_screen.dart';
 
-
 void main() => runApp(Login());
 
 

@@ -128,3 +128,16 @@ class _MyBottomSheetState extends State<MyBottomSheet> {
 }
 
 
+class Activity{
+  ActivityType type;
+  DateTime actionDate;
+  Duration actionDuration;
+  double distance;
+
+  Activity(ActivityType type, DateTime actionDate, Duration actionDuration, double distance){
+    this.type = type;
+    this.actionDate = actionDate;
+    this.actionDuration = actionDuration;
+    this.distance = distance;
+  }
+}
