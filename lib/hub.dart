@@ -60,7 +60,6 @@ class _HubWidgetState extends State<HubWidget> {
       icon = Icons.directions_walk;
       color = Colors.redAccent[200];
     }
-    print(color);
     subtitle = "${this.hub.participants.length} participants";
   }
 
@@ -167,31 +166,37 @@ class _HubListWidgetState extends State<HubListWidget> {
           ],
         ),
       ),
-      body: Column(
+      body: Stack(
         children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(top: 60, bottom: 20),
-            child: Center(
-              child: Text(
-                  "You are in ${hubs.length} hubs",
-                style: TextStyle(
-                  fontSize: 30,
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold
+          Column(
+            children: <Widget>[
+              Container(
+                padding: EdgeInsets.only(top: 60, bottom: 20),
+                child: Center(
+                  child: Text(
+                    "You are in ${hubs.length} hubs",
+                    style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold
+                    ),
+                  ),
                 ),
-              ),
-            ),
 
+              ),
+            ],
           ),
           Container(
-            child: Column(
-              children: hubs.map((hub){
-                return HubWidget(hub);
-              }).toList()
+            padding: EdgeInsets.only(top: 150, bottom: 50),
+            child: ListView.builder(
+              itemCount: hubs.length,
+              itemBuilder: (context, position) {
+                return HubWidget(hubs[position]);
+              },
             ),
           ),
         ],
-      ),
+      )
     );
   }
 }
