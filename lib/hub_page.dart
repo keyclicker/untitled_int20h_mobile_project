@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'activities.dart';
-
 class HubPage extends StatefulWidget {
   @override
   _HubPageState createState() => _HubPageState();
@@ -10,19 +9,32 @@ class HubPage extends StatefulWidget {
 class _HubPageState extends State<HubPage> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: <Widget>[
-            
-          ],
-        ),
-        ListView.builder(
-            itemCount: 5,
-            itemBuilder: (context, index){
-              return ActivityRecord()
-            })
-      ],
+    return Scaffold(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text("lom"),
+          Container(
+            color: Colors.red,
+            height: 200,
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.directions_bike, size: 20,),
+
+              ],
+            ),
+          ),
+          ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index){
+                return ActivityRecord(
+                  type: ActivityType.Cycling,
+                length: 10,
+                    date: DateTime.now(),
+                    duration: Duration(minutes: 24),);
+              })
+        ],
+      ),
     );
   }
 }

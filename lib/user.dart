@@ -22,6 +22,8 @@ class User{
     if (!weak){
       setHubs();
     }
+
+    this.myHubs = [Hub(id:1, name: "EVO hub", type: ActivityType.Running, participants: [this])];
   }
 
   void setHubs() async {
